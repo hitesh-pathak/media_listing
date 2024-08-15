@@ -10,6 +10,7 @@ services:
       - ./openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
       - ./openresty/conf.d/:/etc/nginx/conf.d/:ro
       - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
       # - ./html:/usr/local/openresty/nginx/html
       # - ./lua:/usr/local/openresty/nginx/lua
     networks:
