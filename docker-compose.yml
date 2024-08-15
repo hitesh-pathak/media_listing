@@ -1,21 +1,29 @@
-version: '3.8'
-
 services:
   openresty:
     image: openresty/openresty:alpine
-    container_name: openresty_server
+    container_name: openresty
+    restart: unless-stopped
     ports:
-      - "80:80"
-    # volumes:
-    #   - ./nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
-    #   - ./html:/usr/local/openresty/nginx/html
-    #   - ./lua:/usr/local/openresty/nginx/lua
+      - 80:80
+      - 443:443
+    volumes:
+      - ./openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ./openresty/conf.d/:/etc/nginx/conf.d/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      # - ./html:/usr/local/openresty/nginx/html
+      # - ./lua:/usr/local/openresty/nginx/lua
     networks:
       - app-network
 
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+
   redis:
     image: redis:alpine
-    container_name: redis_server
+    container_name: redis
     # ports:
     #   - "6379:6379"
     networks:
